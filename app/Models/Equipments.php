@@ -47,4 +47,9 @@ class Equipments extends Model
         return $this->hasMany(Orders::class, 'equipment_id', 'id');
     }
 
+    public function equipment_reviews()
+    {
+        return $this->hasMany(EquipmentReview::class, 'equipment_id', 'id');
+    }
+
 }

@@ -5,8 +5,11 @@
             <div class="col-12">
                 <div class="card card-h-100 mt-4">
                     <!--start::card-->
-                    <div class="card-header">
+                    <div class="card-header d-flex justify-content-between align-items-center">
                         <h4 class="card-title mb-0"> Cihazlar </h4>
+                        <a href="{{ route('equipments.create') }}">
+                            <button class="btn btn-primary"><i class="bi bi-plus-circle-dotted me-2"></i>Yeni cihaz əlavə et</button>
+                        </a>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive" data-simplebar>
@@ -50,9 +53,9 @@
                                                     <i class="ri-more-2-line fw-semibold fs-16"></i>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="actionMenu1">
-                                                    <li><a class="dropdown-item" href="javascript:void(0)"><i
+                                                    <li><a class="dropdown-item" href="#"><i
                                                                 class="ri-edit-2-line"></i>Düzəliş et</a></li>
-                                                    <li><a class="dropdown-item" href="javascript:void(0)"><i
+                                                    <li><a class="dropdown-item" href="{{ route('equipments.show', encrypt($equipment->id)) }}"><i
                                                                 class="ri-eye-line"></i>Ətraflı bax</a></li>
                                                     <li><a class="dropdown-item" href="javascript:void(0)"><i
                                                                 class="ri-delete-bin-line"></i>Sil</a></li>

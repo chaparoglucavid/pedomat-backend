@@ -14,6 +14,11 @@ class PedCategories extends Model
     protected $fillable = ['category_name','reason_for_use','status','unit_price'];
     protected $casts = ['unit_price' => 'decimal:2'];
 
+    public function ScopeIsActive($query)
+    {
+        return $query->where('status', 'active');
+    }
+
     public function equipment_ped_stock()
     {
         return $this->hasMany(EquipmentPedStock::class, 'ped_category_id');
