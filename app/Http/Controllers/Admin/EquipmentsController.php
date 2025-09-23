@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Equipments;
 use Illuminate\Http\Request;
 
 class EquipmentsController extends Controller
@@ -12,7 +13,8 @@ class EquipmentsController extends Controller
      */
     public function index()
     {
-        //
+        $equipments = Equipments::withSum('ped_categories as total_qty_available', 'equipment_ped_stocks.qty_available')->get();
+        return view('admin-dashboard.equipments.index', compact('equipments'));
     }
 
     /**

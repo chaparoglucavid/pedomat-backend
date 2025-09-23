@@ -17,6 +17,18 @@ class UserSeeder extends Seeder
     {
         $faker = Faker::create();
 
+        User::create([
+            'full_name'            => 'Cavid Şıxıyev',
+            'email'                => 'chaparoglucavid@gmail.com',
+            'phone'                => '+994508221300',
+            'birthdate'            => '1994-11-29',
+            'password'             => Hash::make('salamadmin'),
+            'activity_status'      => 'active',
+            'system_status'        => 'verified',
+            'user_current_balance' => 0.00,
+            'type'                 => 'admin',
+        ]);
+
         for ($i = 0; $i < 50; $i++) {
             User::create([
                 'full_name'            => $faker->name(),

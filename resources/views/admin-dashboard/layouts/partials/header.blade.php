@@ -190,8 +190,14 @@
                                     Əməliyyat tarixçəsi</a></li>
                         </ul>
                         <ul class="list-unstyled mb-0">
-                            <li><a class="dropdown-item" href="javascript:void(0)"><i
-                                        class="bi bi-box-arrow-right me-1"></i> Çıxış</a></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button class="dropdown-item"><i
+                                            class="bi bi-box-arrow-right me-1"></i> Çıxış
+                                    </button>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>
