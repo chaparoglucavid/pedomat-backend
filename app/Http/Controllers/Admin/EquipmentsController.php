@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Equipments;
 use App\Models\PedCategories;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -24,8 +25,7 @@ class EquipmentsController extends Controller
      */
     public function create()
     {
-        $ped_categories = PedCategories::IsActive()->get();
-        return view('admin-dashboard.equipments.create', compact('ped_categories'));
+        return view('admin-dashboard.equipments.create');
     }
 
     /**
@@ -88,7 +88,13 @@ class EquipmentsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $decrypted = decrypt($id);
+        $equipment = Equipments::find($decrypted);
+        if (!$equipment) {
+            flash()->error('Cihaz tapılmadı.');
+            return redirect()->route('admin.equipments.index');
+        }
+        return view('admin-dashboard.equipments.edit', compact('equipment'));
     }
 
     /**
@@ -96,7 +102,20 @@ class EquipmentsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        try {
+            $validated = $request->validate([
+                'equipment_number'   => 'required|string|max:255|unique:equipments,equipment_number' . $id,
+                'equipment_name'     => 'required|string|max:255|unique:equipments,equipment_name,' . $id,
+                'general_capacity'   => 'nullable|numeric|min:0',
+                'current_address'    => 'nullable|string|max:500',
+                'longitude'          => 'nullable|numeric|between:-180,180',
+                'latitude'           => 'nullable|numeric|between:-90,90',
+                'equipment_status'   => 'required|in:active,inactive,maintenance',
+            ]);
+        } catch (Exception $e)
+        {
+
+        }
     }
 
     /**

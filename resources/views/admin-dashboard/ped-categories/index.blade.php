@@ -6,9 +6,9 @@
                 <div class="card card-h-100 mt-4">
                     <!--start::card-->
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="card-title mb-0"> Cihazlar </h4>
-                        <a href="{{ route('equipments.create') }}">
-                            <button class="btn btn-primary"><i class="bi bi-plus-circle-dotted me-2"></i>Yeni cihaz əlavə et</button>
+                        <h4 class="card-title mb-0"> Kateqoriyalar </h4>
+                        <a href="{{ route('ped-categories.create') }}">
+                            <button class="btn btn-primary"><i class="bi bi-plus-circle-dotted me-2"></i>Yeni kateqoriya əlavə et</button>
                         </a>
                     </div>
                     <div class="card-body">
@@ -16,34 +16,27 @@
                             <table class="table text-nowrap table-borderless mb-0">
                                 <thead>
                                 <tr>
-                                    <th scope="col">Cihaz nömrəsi</th>
-                                    <th scope="col">Cihaz adı</th>
-                                    <th scope="col">Ümumi tutum</th>
-                                    <th scope="col">Cari ped</th>
-                                    <th scope="col">Cari batareya</th>
-                                    <th scope="col">Ünvan</th>
-                                    <th scope="col">Cihaz statusu</th>
+                                    <th scope="col">№</th>
+                                    <th scope="col">Kateqoriya adı</th>
+                                    <th scope="col">İstifadə məqsədi</th>
+                                    <th scope="col">Qiymət (ədəd)</th>
+                                    <th scope="col">Status</th>
                                     <th scope="col">Əməliyyatlar</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @forelse($equipments as $equipment)
+                                @forelse($ped_categories as $category)
                                     <tr>
-                                        <td class="fw-medium">{{$equipment->equipment_number }}</td>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td class="fw-medium">{{$category->category_name }}</td>
                                         <td>
-                                            {{ $equipment->equipment_name }}
-                                        </td>
-                                        <td>{{ $equipment->general_capacity }}</td>
-                                        <td>{{ $equipment->total_qty_available ?? 0 }}</td>
-                                        <td>
-                                            <i class="ri-checkbox-circle-line align-middle text-success"></i>
-                                            {{ rand(50, 100) }}%
+                                            {{ $category->reason_for_use }}
                                         </td>
                                         <td>
-                                            {{ $equipment->current_address }}
+                                            {{ $category->unit_price }}
                                         </td>
                                         <td>
-                                            <span class="badge border border-{{ config('localData.equipment_status')[$equipment->equipment_status]['class'] }} text-{{ config('localData.equipment_status')[$equipment->equipment_status]['class'] }}">{{ config('localData.equipment_status')[$equipment->equipment_status]['text'] }}</span>
+                                            <span class="badge border border-{{ config('localData.ped_category_status')[$category->status]['class'] }} text-{{ config('localData.ped_category_status')[$category->status]['class'] }}">{{ config('localData.ped_category_status')[$category->status]['text'] }}</span>
                                         </td>
                                         <td>
                                             <div class="dropdown">
@@ -53,9 +46,9 @@
                                                     <i class="ri-more-2-line fw-semibold fs-16"></i>
                                                 </button>
                                                 <ul class="dropdown-menu" aria-labelledby="actionMenu1">
-                                                    <li><a class="dropdown-item" href="{{ route('equipments.edit', encrypt($equipment->id)) }}"><i
+                                                    <li><a class="dropdown-item" href="{{ route('ped-categories.edit', encrypt($category->id)) }}"><i
                                                                 class="ri-edit-2-line"></i>Düzəliş et</a></li>
-                                                    <li><a class="dropdown-item" href="{{ route('equipments.show', encrypt($equipment->id)) }}"><i
+                                                    <li><a class="dropdown-item" href="{{ route('ped-categories.show', encrypt($category->id)) }}"><i
                                                                 class="ri-eye-line"></i>Ətraflı bax</a></li>
                                                     <li><a class="dropdown-item" href="javascript:void(0)"><i
                                                                 class="ri-delete-bin-line"></i>Sil</a></li>

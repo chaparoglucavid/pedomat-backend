@@ -11,9 +11,9 @@
 <footer class="footer">
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center gap-2">
-            <script>document.write(new Date().getFullYear())</script> © FabKin.
+            <script>document.write(new Date().getFullYear())</script> © Pedomat.
             <div class="text-sm-end d-none d-sm-block">
-                Design & Develop by Pixeleyez
+                Bütün hüquqlar qorunur.
             </div>
         </div>
     </div>

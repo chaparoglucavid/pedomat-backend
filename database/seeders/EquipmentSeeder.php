@@ -55,7 +55,7 @@ class EquipmentSeeder extends Seeder
                 'general_capacity' => 25,
                 'battery_level' => 45,
                 'current_address' => 'Rəşid Behbudov küçəsi 24, Nəsimi, Bakı',
-                'equipment_status' => 'under_repair',
+                'equipment_status' => 'maintenance',
                 'latitude' => 40.3799000,
                 'longitude' => 49.8520000,
                 'created_at' => now(), 'updated_at' => now(),

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PedCategories;
 use Illuminate\Http\Request;
 
 class PedCategoriesController extends Controller
@@ -12,7 +13,8 @@ class PedCategoriesController extends Controller
      */
     public function index()
     {
-        //
+        $ped_categories = PedCategories::all();
+        return view('admin-dashboard.ped-categories.index', compact('ped_categories'));
     }
 
     /**

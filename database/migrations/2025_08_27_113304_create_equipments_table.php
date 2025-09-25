@@ -20,7 +20,7 @@ return new class extends Migration
             $table->text('current_address');
             $table->decimal('longitude', 10, 7)->nullable();
             $table->decimal('latitude', 10, 7)->nullable();
-            $table->enum('equipment_status', ['active', 'deactive', 'under_repair'])->default('active');
+            $table->enum('equipment_status', ['active', 'deactive', 'maintenance'])->default('active');
             $table->softDeletes();
             $table->timestamps();
         });
