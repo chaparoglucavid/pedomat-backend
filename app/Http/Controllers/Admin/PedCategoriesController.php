@@ -22,7 +22,7 @@ class PedCategoriesController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin-dashboard.ped-categories.create');
     }
 
     /**
@@ -30,7 +30,17 @@ class PedCategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'category_name'   => 'required|string|max:255',
+            'reason_for_use'  => 'nullable|string',
+            'unit_price'      => 'required|numeric|min:0',
+            'status'          => 'required|in:active,inactive',
+        ]);
+
+        PedCategories::create($validated);
+
+        flash()->success('Yeni PED kateqoriyası uğurla əlavə edildi');
+        return redirect()->route('ped-categories.index');
     }
 
     /**
@@ -46,15 +56,37 @@ class PedCategoriesController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $decrypted = decrypt($id);
+        $ped_category = PedCategories::findOrFail($decrypted);
+        if(!$ped_category)
+        {
+            return flash()->error('Kateqoriya tapılmadı.');
+        }
+        return view('admin-dashboard.ped-categories.edit', compact('ped_category'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $decrypted = decrypt($id);
+        $ped_category = PedCategories::findOrFail($decrypted);
+        if(!$ped_category)
+        {
+            return flash()->error('Kateqoriya tapılmadı.');
+        }
+        $validated = $request->validate([
+            'category_name'   => 'required|string|max:255',
+            'reason_for_use'  => 'nullable|string',
+            'unit_price'      => 'required|numeric|min:0',
+            'status'          => 'required|in:active,inactive',
+        ]);
+
+        $ped_category->update($validated);
+
+        return redirect()->route('ped-categories.index')
+            ->with('success', 'PED kateqoriya uğurla yeniləndi.');
     }
 
     /**

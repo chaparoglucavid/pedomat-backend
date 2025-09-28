@@ -19,7 +19,7 @@ return new class extends Migration
             $table->date('birthdate')->nullable();
             $table->string('password');
             $table->string('activity_status')->default('active');
-            $table->string('system_status')->default('verified');
+            $table->enum('system_status', ['verified', 'unverified', 'banned', 'deactivated'])->default('unverified');
             $table->double('user_current_balance')->default(0.00);
             $table->string('type')->default('user');
             $table->timestamp('email_verified_at')->nullable();

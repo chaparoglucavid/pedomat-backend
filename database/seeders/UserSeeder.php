@@ -37,7 +37,7 @@ class UserSeeder extends Seeder
                 'birthdate'            => $faker->date('Y-m-d', '2005-01-01'),
                 'password'             => Hash::make('password'),
                 'activity_status'      => $faker->randomElement(['active', 'inactive']),
-                'system_status'        => $faker->randomElement(['pending', 'verified', 'banned']),
+                'system_status'        => $faker->randomElement(['unverified', 'verified', 'banned', 'deactivated']),
                 'user_current_balance' => $faker->randomFloat(2, 0, 1000),
                 'type'                 => $faker->randomElement(['admin', 'user']),
             ]);

@@ -26,4 +26,24 @@ return [
             'class' => 'danger'
         ]
     ],
+
+    'user_system_status' => [
+        'verified' => [
+            'text' => 'Təsdiqlənmiş',
+            'class' => 'success'
+        ],
+        'unverified' => [
+            'text' => 'Təsdiqlənməmiş',
+            'class' => 'warning'
+        ],
+        'deactivated' => [
+            'text' => 'Hesab dondurulub',
+            'class' => 'info'
+        ],
+        'banned' => [
+            'text' => 'Ban edilib',
+            'class' => 'danger'
+        ]
+        
+    ],
 ];
