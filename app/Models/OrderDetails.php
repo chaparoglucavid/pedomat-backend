@@ -23,4 +23,9 @@ class OrderDetails extends Model
     {
         return $this->belongsTo(Orders::class, 'order_id', 'id');
     }
+
+    public function ped_category()
+    {
+        return $this->belongsTo(PedCategories::class, 'ped_category_id', 'id');
+    }
 }

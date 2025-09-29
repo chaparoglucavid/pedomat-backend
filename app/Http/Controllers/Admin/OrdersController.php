@@ -38,7 +38,14 @@ class OrdersController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $decrypt = decrypt($id);
+        $order = Orders::find($decrypt);
+        if(!$order)
+        {
+            flash()->error('Sifariş tapılmadı.');
+        }
+        $order->load(['order_details', 'user', 'equipment']);
+        return view('admin-dashboard.orders.show', compact('order'));
     }
 
     /**

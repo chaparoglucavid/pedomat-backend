@@ -72,37 +72,25 @@
                                             </span>
                                         </td>
                                         <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-light-primary icon-btn" type="button"
-                                                        id="actionMenu{{ $order->id }}" data-bs-toggle="dropdown"
-                                                        aria-expanded="false">
-                                                    <i class="ri-more-2-line fw-semibold fs-16"></i>
+                                            <div class="hstack gap-2">
+                                                <a href="{{ route('orders.show', encrypt($order->id)) }}">
+                                                    <button type="button" class="btn btn-light-success icon-btn-sm"
+                                                            data-bs-toggle="tooltip"
+                                                            data-bs-custom-class="tooltip-white" data-bs-placement="top"
+                                                            data-bs-title="Ətraflı bax">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                </a>
+                                                <button type="button" class="btn btn-light-primary icon-btn-sm"
+                                                        data-bs-toggle="tooltip" data-bs-custom-class="tooltip-white"
+                                                        data-bs-placement="top" data-bs-title="Edit">
+                                                    <i class="bi bi-pencil-square"></i>
                                                 </button>
-                                                <ul class="dropdown-menu" aria-labelledby="actionMenu{{ $order->id }}">
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                           href="{{ route('users.edit', encrypt($order->id)) }}">
-                                                            <i class="ri-edit-2-line"></i>Düzəliş et
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                           href="{{ route('users.show', encrypt($order->id)) }}">
-                                                            <i class="ri-eye-line"></i>Ətraflı bax
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <form action="{{ route('users.destroy', encrypt($order->id)) }}"
-                                                              method="POST"
-                                                              onsubmit="return confirm('İstifadəçini silmək istədiyinizə əminsinizmi?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="dropdown-item text-danger">
-                                                                <i class="ri-delete-bin-line"></i>Sil
-                                                            </button>
-                                                        </form>
-                                                    </li>
-                                                </ul>
+                                                <button type="button" class="btn btn-light-danger icon-btn-sm"
+                                                        data-bs-toggle="tooltip" data-bs-custom-class="tooltip-white"
+                                                        data-bs-placement="top" data-bs-title="Delete">
+                                                    <i class="ri-delete-bin-line"></i>
+                                                </button>
                                             </div>
                                         </td>
                                     </tr>

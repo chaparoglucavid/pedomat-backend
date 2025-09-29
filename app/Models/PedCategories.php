@@ -33,4 +33,9 @@ class PedCategories extends Model
             'equipment_id'
         )->withPivot(['qty_available'])->withTimestamps();
     }
+
+    public function order_details()
+    {
+        return $this->hasMany(OrderDetails::class, 'ped_category_id');
+    }
 }
