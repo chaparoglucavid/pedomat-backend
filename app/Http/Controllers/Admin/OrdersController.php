@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Orders;
 use Illuminate\Http\Request;
 
 class OrdersController extends Controller
@@ -12,7 +13,8 @@ class OrdersController extends Controller
      */
     public function index()
     {
-        //
+        $orders = Orders::with(['order_details', 'user', 'equipment'])->orderBy('created_at', 'DESC')->get();
+        return view('admin-dashboard.orders.index', compact('orders'));
     }
 
     /**

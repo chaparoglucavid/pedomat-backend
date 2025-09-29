@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('order_amount_sum', 10,2)->default(0.00);
             $table->string('invoice')->nullable();
             $table->enum('payment_method', ['balance', 'card'])->default('balance');
-            $table->enum('payment_status', ['pending', 'processing', 'completed'])->default('pending');
+            $table->enum('payment_status', ['pending', 'processing', 'completed', 'error'])->default('pending');
             $table->text('barcode')->nullable();
             $table->enum('barcode_status', ['not_used', 'used'])->default('not_used');
             $table->softDeletes();
