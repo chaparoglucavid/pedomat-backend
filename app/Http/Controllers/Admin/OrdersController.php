@@ -53,7 +53,15 @@ class OrdersController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $decrypted = decrypt($id);
+        $order = Orders::find($decrypted);
+        if(!$order)
+        {
+            flash()->error('Axtardığınız məlumat üzrə sifariş tapılmadı.');
+        }
+
+        $order->load(['order_details', 'user', 'equipment']);
+        return view('admin-dashboard.orders.edit', compact('order'));
     }
 
     /**

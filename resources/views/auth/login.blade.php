@@ -42,12 +42,12 @@
                                 <div class="col-12">
                                     <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control" id="email"
-                                           placeholder="email adresinizi daxil edin" name="email" required>
+                                           placeholder="Email adresinizi daxil edin" name="email" required>
                                 </div>
                                 <div class="col-12">
                                     <label for="password" class="form-label">Şifrə <span class="text-danger">*</span></label>
                                     <input type="password" class="form-control" id="password"
-                                           placeholder="Enter your password" name="password" required>
+                                           placeholder="Şifrənizi daxil edin" name="password" required>
                                 </div>
                                 <div class="col-12 mt-8">
                                     <button type="submit" class="btn btn-primary w-full mb-4">Daxil olun<i
