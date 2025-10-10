@@ -12,9 +12,12 @@ class EquipmentsController extends Controller
     public function index()
     {
         $equipments = EquipmentsResource::collection(Equipments::all());
-        return response()->json([
-            'test' => '123'
-        ]);
         return response()->json($equipments, 200);
+    }
+
+    public function details($id)
+    {
+        $equipment = Equipments::find($id);
+        return response()->json($equipment, 200);
     }
 }

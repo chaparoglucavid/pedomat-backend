@@ -15,6 +15,7 @@ class EquipmentsResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'equipment_number' => $this->equipment_number,
             'equipment_name' => $this->equipment_name,
             'general_capacity' => $this->general_capacity,
@@ -22,7 +23,8 @@ class EquipmentsResource extends JsonResource
             'current_address' => $this->current_address,
             'longitude' => $this->longitude,
             'latitude' => $this->latitude,
-            'equipment_status' => $this->equipment_status
+            'equipment_status' => $this->equipment_status,
+            'current_ped_count' => $this->ped_categories()->sum('qty_available')
         ];
     }
 }
