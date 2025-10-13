@@ -18,6 +18,12 @@ class EquipmentsController extends Controller
     public function details($id)
     {
         $equipment = Equipments::find($id);
+        if (!$equipment)
+        {
+            return response()->json('Cihaz tapılmadı', 404);
+        }
+
+        $equipment->load('equipment_ped_stock.ped_category');
         return response()->json($equipment, 200);
     }
 }

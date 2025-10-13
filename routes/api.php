@@ -1,12 +1,16 @@
 <?php
 
 use App\Http\Controllers\Api\EquipmentsController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\Auth\LoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout']);
+
+Route::middleware('auth:sanctum')->post('/update-profile', [UserController::class, 'updateProfile']);
 
 Route::get('equipments', [EquipmentsController::class, 'index']);
 Route::get('equipment-details/{id}', [EquipmentsController::class, 'details']);
