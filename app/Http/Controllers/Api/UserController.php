@@ -26,4 +26,16 @@ class UserController extends Controller
             'user' => $user
         ]);
     }
+
+    public function balanceHistory()
+    {
+        $user = Auth::user();
+
+        $balanceHistory = $user->user_balance_history()->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $balanceHistory
+        ]);
+    }
 }

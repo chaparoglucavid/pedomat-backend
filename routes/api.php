@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout']);
 
+Route::middleware('auth:sanctum')->post('/logout', [LoginController::class, 'logout']);
 Route::middleware('auth:sanctum')->post('/update-profile', [UserController::class, 'updateProfile']);
+Route::middleware('auth:sanctum')->post('/user-balance-history', [UserController::class, 'getUserBalanceHistory']);
 
 Route::get('equipments', [EquipmentsController::class, 'index']);
 Route::get('equipment-details/{id}', [EquipmentsController::class, 'details']);
