@@ -89,9 +89,9 @@ class User extends Authenticatable
         return $this->orders()->where('barcode_status', 'not_used')->count();
     }
 
-    public function user_balance_history()
+    public function user_transaction_history()
     {
-        return $this->hasMany(UserBalanceHistory::class, 'user_id');
+        return $this->hasMany(UserTransactionHistory::class, 'user_id');
     }
 
     public function orders()

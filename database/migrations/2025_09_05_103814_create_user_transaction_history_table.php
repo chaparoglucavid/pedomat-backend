@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_balance_history', function (Blueprint $table) {
+        Schema::create('user_transaction_history', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->string('transaction_number')->unique();
             $table->decimal('amount', 10, 2);
             $table->string('payment_via');
             $table->integer('payment_status')->default(200);
+            $table->enum('transaction_type', ['income', 'expense']);
             $table->softDeletes();
             $table->timestamps();
         });
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_balance_history');
+        Schema::dropIfExists('user_transaction_history');
     }
 };

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -24,18 +25,18 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Məlumatlar müvəffəqiyyətlə yeniləndi',
             'user' => $user
-        ]);
+        ], 200);
     }
 
-    public function balanceHistory()
+    public function getUserTransactionHistory()
     {
         $user = Auth::user();
 
-        $balanceHistory = $user->user_balance_history()->get();
+        $transactionHistory = $user->user_transaction_history()->get();
 
         return response()->json([
             'success' => true,
-            'data' => $balanceHistory
+            'data' => $transactionHistory
         ]);
     }
 }

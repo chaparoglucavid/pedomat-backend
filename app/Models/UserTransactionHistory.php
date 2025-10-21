@@ -7,17 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
-class UserBalanceHistory extends Model
+class UserTransactionHistory extends Model
 {
     use HasFactory, Notifiable, SoftDeletes;
 
-    protected $table = 'user_balance_history';
+    protected $table = 'user_transaction_history';
     protected $fillable = [
         'user_id',
         'transaction_number',
         'amount',
         'payment_via',
-        'payment_status'
+        'payment_status',
+        'transaction_type'
     ];
 
     public function user()

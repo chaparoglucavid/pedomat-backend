@@ -29,7 +29,7 @@ class UserSeeder extends Seeder
             'type'                 => 'admin',
         ]);
 
-        for ($i = 0; $i < 50; $i++) {
+        for ($i = 0; $i < 10; $i++) {
             User::create([
                 'full_name'            => $faker->name(),
                 'email'                => $faker->unique()->safeEmail(),

@@ -64,7 +64,7 @@ class UsersController extends Controller
             flash()->error('İstifadəçi tapılmadı.');
             return redirect()->back();
         }
-        $user->load('user_balance_history', 'orders', 'equipment_reviews');
+        $user->load('user_transaction_history', 'orders', 'equipment_reviews');
         return view('admin-dashboard.users.show', compact('user'));
     }
 
