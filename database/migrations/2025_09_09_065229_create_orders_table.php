@@ -23,6 +23,8 @@ return new class extends Migration
             $table->enum('payment_status', ['pending', 'processing', 'completed', 'error'])->default('pending');
             $table->text('barcode')->nullable();
             $table->enum('barcode_status', ['not_used', 'used'])->default('not_used');
+            $table->dateTime('barcode_expiry_time')->nullable();
+            $table->enum('order_status', ['pending', 'reserved',' partially_consumed', 'consumed', 'refunded', 'closed'])->default('reserved');
             $table->softDeletes();
             $table->timestamps();
         });

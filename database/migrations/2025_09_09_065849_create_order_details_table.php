@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('qty')->default(0);
             $table->decimal('unit_price', 10, 2)->default(0.00);
             $table->decimal('total_price', 10, 2)->default(0.00);
+            $table->enum('ped_status',['reserved', 'consumed', 'returned'])->default('reserved');
             $table->softDeletes();
             $table->timestamps();
         });

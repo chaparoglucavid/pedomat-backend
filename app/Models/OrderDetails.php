@@ -16,7 +16,8 @@ class OrderDetails extends Model
         'ped_category_id',
         'qty',
         'unit_price',
-        'total_price'
+        'total_price',
+        'ped_status'
     ];
 
     public function order()

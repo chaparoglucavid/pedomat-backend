@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\BarcodeService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -21,8 +22,20 @@ class Orders extends Model
         'payment_method',
         'payment_status',
         'barcode',
-        'barcode_status'
+        'barcode_status',
+        'barcode_expiry_time',
+        'order_status'
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($order) {
+            $orderCode = 'ORD-'.time();
+            $barcodeService = app(BarcodeService::class);
+            $order->order_number = $orderCode;
+            $order->barcode = $barcodeService->generateBarcode($orderCode);
+        });
+    }
 
     public function user()
     {
