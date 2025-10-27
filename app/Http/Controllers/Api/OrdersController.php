@@ -123,7 +123,7 @@ class OrdersController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Order successfully placed!',
+                'message' => 'Sifariş müvəffəqiyyətlə qeyd edildi!',
                 'order' => $order->load('order_details'),
             ], 201);
 

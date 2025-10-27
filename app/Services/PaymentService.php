@@ -12,6 +12,15 @@ class PaymentService {
             throw new \Exception("Balans kifayət deyil.");
         }
         $user->decrement('user_current_balance', $totalAmount);
+
+        $user->user_transaction_history()->create([
+            'user_id' => $user->id,
+            'transaction_number' => 'EXP-'.time(),
+            'amount' => $totalAmount,
+            'payment_via' => 'balance',
+            'payment_status' => 200,
+            'transaction_type' => 'expense'
+        ]);
         return true;
     }
 
