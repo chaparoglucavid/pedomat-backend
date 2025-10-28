@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -16,17 +17,33 @@ class UserController extends Controller
             'phone' => 'nullable|string',
         ]);
 
-        $user = $request->user();
-        $user->full_name = $request->name;
-        $user->email = $request->email;
-        $user->phone = $request->phone;
-        $user->save();
+        DB::beginTransaction();
 
-        return response()->json([
-            'message' => 'Məlumatlar müvəffəqiyyətlə yeniləndi',
-            'user' => $user
-        ], 200);
+        try {
+            $user = $request->user();
+            $user->full_name = $request->name;
+            $user->email = $request->email;
+            $user->phone = $request->phone;
+            $user->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Məlumatlar müvəffəqiyyətlə yeniləndi',
+                'user' => $user
+            ], 200);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Xəta baş verdi. Zəhmət olmasa, yenidən cəhd edin.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
     public function getUserTransactionHistory()
     {
@@ -36,7 +53,8 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
+            'message' => 'Hesab məlumatları müvəffəqiyyətlə yeniləndi',
             'data' => $transactionHistory
-        ]);
+        ], 200);
     }
 }

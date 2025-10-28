@@ -9,6 +9,7 @@ use App\Models\Orders;
 use App\Models\PedCategories;
 use App\Services\BarcodeService;
 use App\Services\PaymentService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -115,6 +116,7 @@ class OrdersController extends Controller
                 'payment_method' => $paymentMethod,
                 'payment_status' => 'pending',
                 'barcode_status' => 'not_used',
+                'barcode_expiry_time' => Carbon::now('Asia/Baku')->addHours(2),
                 'order_status' => 'pending'
             ]);
 

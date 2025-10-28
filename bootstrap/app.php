@@ -15,5 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->appendToGroup('api', \Illuminate\Http\Middleware\HandleCors::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
-    })->create();
+
+    })
+    ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule) {
+        $schedule->command('orders:expire-barcodes')->everyMinute();
+    })
+    ->create();
