@@ -10,6 +10,7 @@ use App\Models\PedCategories;
 use App\Services\BarcodeService;
 use App\Services\PaymentService;
 use Carbon\Carbon;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -139,4 +140,53 @@ class OrdersController extends Controller
             ], 500);
         }
     }
+
+    public function cancel(Request $request, PaymentService $paymentService)
+    {
+        try {
+            DB::beginTransaction();
+            $user = Auth::user();
+            $orderId = $request->input('orderId');
+            $order = Orders::with('order_details')->find($orderId);
+
+            if (!$order) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Axtardığınız məlumat üzrə sifariş tapılmadı.',
+                ], 404);
+            }
+
+            if ($order->order_status !== 'pending') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bu sifarişi ləğv etmək mümkün deyil.',
+                ], 400);
+            }
+
+            if ($order->payment_method === 'balance' && $order->payment_status === 'completed') {
+                $paymentService->refundToBalance($user, $order->order_amount_sum);
+            }
+
+            $order->order_status = 'refunded';
+            $order->order_details()->update(['ped_status' => 'returned']);
+            $order->save();
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => $order->order_number. ' nömrəli sifariş müvəffəqiyyətlə ləğv edildi və ödənilən məbləğ balansınıza geri qaytarıldı.',
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Sifariş ləğv edilərkən xəta baş verdi.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
 }

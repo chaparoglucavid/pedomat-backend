@@ -27,6 +27,14 @@ class PaymentService {
     public function refundToBalance(User $user, $amount)
     {
         $user->increment('user_current_balance', $amount);
+        $user->user_transaction_history()->create([
+            'user_id' => $user->id,
+            'transaction_number' => 'REF-'.time(),
+            'amount' => $amount,
+            'payment_via' => 'balance',
+            'payment_status' => 200,
+            'transaction_type' => 'refund'
+        ]);
         return true;
     }
 

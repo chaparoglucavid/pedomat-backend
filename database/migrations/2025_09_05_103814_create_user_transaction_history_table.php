@@ -18,7 +18,7 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->string('payment_via');
             $table->integer('payment_status')->default(200);
-            $table->enum('transaction_type', ['income', 'expense']);
+            $table->enum('transaction_type', ['income', 'expense', 'refund']);
             $table->softDeletes();
             $table->timestamps();
         });

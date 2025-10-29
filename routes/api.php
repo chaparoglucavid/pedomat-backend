@@ -17,6 +17,7 @@ Route::middleware('auth:sanctum')->get('/user-transaction-history', [UserControl
 Route::middleware('auth:sanctum')->post('/top-up-balance', [UserBalanceController::class, 'topUpBalance']);
 Route::middleware('auth:sanctum')->get('/orders', [OrdersController::class, 'orders']);
 Route::middleware('auth:sanctum')->post('/orders/store', [OrdersController::class, 'store']);
+Route::middleware('auth:sanctum')->post('/cancel-order', [OrdersController::class, 'cancel']);
 
 Route::get('equipments', [EquipmentsController::class, 'index']);
 Route::get('equipment-details/{id}', [EquipmentsController::class, 'details']);
