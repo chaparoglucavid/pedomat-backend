@@ -8,7 +8,7 @@ use App\Http\Controllers\Admin\{
     UsersController,
     ForumController,
     PedCategoriesController,
-    PaymentHistoriesController,
+    TransactionHistoriesController,
     OrdersController
 };
 use Illuminate\Support\Facades\Route;
@@ -27,7 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('ped-categories', PedCategoriesController::class);
     Route::resource('users', UsersController::class);
     Route::resource('orders', OrdersController::class);
-    Route::resource('payment-histories', PaymentHistoriesController::class);
+    Route::resource('transaction-histories', TransactionHistoriesController::class);
     Route::resource('forums', ForumController::class);
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

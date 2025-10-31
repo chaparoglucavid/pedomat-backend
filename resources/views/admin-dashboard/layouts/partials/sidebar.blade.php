@@ -43,7 +43,7 @@
                     </a>
                 </li>
                 <li class="pe-slide pe-has-sub">
-                    <a href="{{ route('payment-histories.index') }}" class="pe-nav-link">
+                    <a href="{{ route('transaction-histories.index') }}" class="pe-nav-link">
                         <i class="bi bi-credit-card-2-front pe-nav-icon"></i>
                         <span class="pe-nav-content">Ödəniş tarixçəsi</span>
                     </a>

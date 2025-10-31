@@ -7,7 +7,7 @@
                 <div class="card card-h-100 mt-4">
                     <!--start::card-->
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <h4 class="card-title mb-0"> İstifadəçilər </h4>
+                        <h4 class="card-title mb-0"> Sifarişlər </h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive" data-simplebar>
@@ -63,7 +63,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            {{ $order->barcode }}
+                                            <img src="">
                                         </td>
                                         <td>
                                             <span class="badge border border-{{ config('localData.barcode_status')[$order->barcode_status]['class'] ?? 'secondary' }}

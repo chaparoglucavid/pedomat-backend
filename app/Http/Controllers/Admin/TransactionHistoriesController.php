@@ -3,16 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserTransactionHistory;
 use Illuminate\Http\Request;
 
-class PaymentHistoriesController extends Controller
+class TransactionHistoriesController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $transaction_histories = UserTransactionHistory::with('user')->get();
+        return view('admin-dashboard.transaction-histories.index', compact('transaction_histories'));
     }
 
     /**
