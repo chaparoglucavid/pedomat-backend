@@ -115,7 +115,7 @@ class OrdersController extends Controller
                 'order_qty_sum' => $orderQtySum,
                 'order_amount_sum' => $totalAmount,
                 'payment_method' => $paymentMethod,
-                'payment_status' => 'pending',
+                'payment_status' => 'completed',
                 'barcode_status' => 'not_used',
                 'barcode_expiry_time' => Carbon::now('Asia/Baku')->addHours(2),
                 'order_status' => 'pending'
@@ -123,6 +123,8 @@ class OrdersController extends Controller
 
             $order->order_details()->createMany($preparedItems);
             DB::commit();
+
+
 
             return response()->json([
                 'success' => true,

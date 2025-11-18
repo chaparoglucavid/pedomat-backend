@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Events\UserRegistered;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -33,6 +35,8 @@ class RegistrationController extends Controller
         ]);
 
         $token = $user->createToken('mobile')->plainTextToken;
+
+        event(new UserRegistered($user));
 
         return response()->json([
             'user' => $user,
