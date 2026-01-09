@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\User;
 
 class PaymentService {
-    public function viaBalance(User $user, $totalAmount)
+    public function viaBalance(User $user, $totalAmount, $orderId = null)
     {
 
         if ($user->user_current_balance < $totalAmount) {
@@ -15,6 +15,7 @@ class PaymentService {
 
         $user->user_transaction_history()->create([
             'user_id' => $user->id,
+            'order_id' => $orderId,
             'transaction_number' => 'EXP-'.time(),
             'amount' => $totalAmount,
             'payment_via' => 'balance',
@@ -24,11 +25,12 @@ class PaymentService {
         return true;
     }
 
-    public function refundToBalance(User $user, $amount)
+    public function refundToBalance(User $user, $amount, $orderId = null)
     {
         $user->increment('user_current_balance', $amount);
         $user->user_transaction_history()->create([
             'user_id' => $user->id,
+            'order_id' => $orderId,
             'transaction_number' => 'REF-'.time(),
             'amount' => $amount,
             'payment_via' => 'balance',

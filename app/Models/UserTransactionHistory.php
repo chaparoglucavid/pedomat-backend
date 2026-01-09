@@ -14,12 +14,18 @@ class UserTransactionHistory extends Model
     protected $table = 'user_transaction_history';
     protected $fillable = [
         'user_id',
+        'order_id',
         'transaction_number',
         'amount',
         'payment_via',
         'payment_status',
         'transaction_type'
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Orders::class, 'order_id', 'id');
+    }
 
     public function user()
     {

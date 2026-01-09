@@ -24,6 +24,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('equipments', EquipmentsController::class);
+    Route::post('equipments/{id}/add-ped', [EquipmentsController::class, 'addPedStock'])->name('equipments.add-ped');
     Route::resource('ped-categories', PedCategoriesController::class);
     Route::resource('users', UsersController::class);
     Route::resource('orders', OrdersController::class);

@@ -56,14 +56,6 @@ class OrdersController extends Controller
             $paymentMethod = $validated['paymentMethod'];
             $orderItems = $validated['orderItems'];
 
-            // Payment
-            $logs[] = ['info' => 'Payment process started', 'method' => $paymentMethod, 'totalAmount' => $totalAmount];
-            if ($paymentMethod === 'balance') {
-                $paymentService->viaBalance($user, $totalAmount);
-            } else {
-                $paymentService->viaCard($user, $totalAmount);
-            }
-
             // Prepare order items
             $orderQtySum = 0;
             $preparedItems = [];
@@ -122,6 +114,15 @@ class OrdersController extends Controller
             ]);
 
             $order->order_details()->createMany($preparedItems);
+
+            // Payment
+            $logs[] = ['info' => 'Payment process started', 'method' => $paymentMethod, 'totalAmount' => $totalAmount];
+            if ($paymentMethod === 'balance') {
+                $paymentService->viaBalance($user, $totalAmount, $order->id);
+            } else {
+                $paymentService->viaCard($user, $totalAmount);
+            }
+
             DB::commit();
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Equipments;
+use App\Models\EquipmentPedStock;
 use App\Models\PedCategories;
 use Exception;
 use Illuminate\Http\Request;
@@ -17,7 +18,49 @@ class EquipmentsController extends Controller
     public function index()
     {
         $equipments = Equipments::withSum('ped_categories as total_qty_available', 'equipment_ped_stocks.qty_available')->get();
-        return view('admin-dashboard.equipments.index', compact('equipments'));
+        $ped_categories = PedCategories::all();
+        return view('admin-dashboard.equipments.index', compact('equipments', 'ped_categories'));
+    }
+
+    public function addPedStock(Request $request, string $id)
+    {
+        $request->validate([
+            'ped_category_id' => 'required|exists:ped_categories,id',
+            'qty' => 'required|integer|min:1',
+        ]);
+
+        try {
+            // Find equipment (assuming $id is NOT encrypted in the route parameter for this custom action, 
+            // BUT looking at other methods like show/edit, they decrypt $id. 
+            // I should follow the pattern. If the route uses {equipment}, it might bind the model.
+            // However, the existing code uses `string $id` and `decrypt($id)`. 
+            // So I will assume the ID passed from the view will be encrypted.
+            
+            $decryptedId = decrypt($id);
+            $equipment = Equipments::findOrFail($decryptedId);
+
+            $stock = EquipmentPedStock::where('equipment_id', $equipment->id)
+                ->where('ped_category_id', $request->ped_category_id)
+                ->first();
+
+            if ($stock) {
+                $stock->increment('qty_available', $request->qty);
+            } else {
+                EquipmentPedStock::create([
+                    'equipment_id' => $equipment->id,
+                    'ped_category_id' => $request->ped_category_id,
+                    'qty_available' => $request->qty
+                ]);
+            }
+
+            flash()->success('Pedlər uğurla əlavə olundu.');
+            return redirect()->back();
+
+        } catch (\Exception $e) {
+            Log::error('Ped əlavə edilərkən xəta: ' . $e->getMessage());
+            flash()->error('Xəta baş verdi.');
+            return redirect()->back();
+        }
     }
 
     /**

@@ -36,24 +36,9 @@
                                         <td>{{ $item->created_at }} </td>
                                         <td>
                                             <div class="hstack gap-2">
-                                                <a href="{{ route('orders.show', encrypt($item->id)) }}">
-                                                    <button type="button" class="btn btn-light-success icon-btn-sm"
-                                                            data-bs-toggle="tooltip"
-                                                            data-bs-custom-class="tooltip-white" data-bs-placement="top"
-                                                            data-bs-title="Ətraflı bax">
-                                                        <i class="bi bi-eye"></i>
-                                                    </button>
-                                                </a>
-                                                <button type="button" class="btn btn-light-primary icon-btn-sm"
-                                                        data-bs-toggle="tooltip" data-bs-custom-class="tooltip-white"
-                                                        data-bs-placement="top" data-bs-title="Edit">
-                                                    <i class="bi bi-pencil-square"></i>
-                                                </button>
-                                                <button type="button" class="btn btn-light-danger icon-btn-sm"
-                                                        data-bs-toggle="tooltip" data-bs-custom-class="tooltip-white"
-                                                        data-bs-placement="top" data-bs-title="Delete">
-                                                    <i class="ri-delete-bin-line"></i>
-                                                </button>
+                                                @if(!is_null($item->order_id))
+                                                    <a href="{{ route('orders.show', $item->order_id) }}" class="btn btn-primary btn-sm">Sifarişi göstər</a>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>

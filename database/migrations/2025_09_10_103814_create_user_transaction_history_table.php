@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('user_transaction_history', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('order_id')->nullable()->constrained('orders');
             $table->string('transaction_number')->unique();
             $table->decimal('amount', 10, 2);
             $table->string('payment_via');

@@ -52,9 +52,18 @@ class Orders extends Model
         return $this->hasMany(OrderDetails::class, 'order_id', 'id');
     }
 
+    public function user_transaction_history()
+    {
+        return $this->hasMany(UserTransactionHistory::class, 'order_id', 'id');
+    }
 
     public function equipment_reviews()
     {
         return $this->hasMany(EquipmentReview::class, 'order_id', 'id');
+    }
+
+    public function transaction_history()
+    {
+        return $this->hasOne(UserTransactionHistory::class, 'order_id', 'id');
     }
 }

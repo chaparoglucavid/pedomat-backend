@@ -43,6 +43,7 @@ class OrdersController extends Controller
         if(!$order)
         {
             flash()->error('Sifariş tapılmadı.');
+            return redirect()->back();
         }
         $order->load(['order_details', 'user', 'equipment']);
         return view('admin-dashboard.orders.show', compact('order'));

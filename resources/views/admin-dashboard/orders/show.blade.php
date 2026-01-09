@@ -252,61 +252,78 @@
                             <h5 class="card-title flex-grow-1 mb-0">Sifariş izləmə</h5>
                             <div
                                 class="avatar-sm bg-primary-subtle text-primary d-flex justify-content-center align-items-center rounded-2">
-                                <i class="ri-truck-line"></i>
+                                <i class="ri-barcode-line"></i>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="timeline2 profile-timeline">
                             <ul>
+                                <!-- Sifariş verilmə tarixi -->
                                 <li class="card border-0 box">
                                     <span
                                         class="h-28px w-28px d-flex justify-content-center align-items-center text-white"><i
                                             class="ri-shopping-bag-line"></i></span>
-                                    <div class="title">15 Dec 2024 <span
-                                            class="badge bg-primary float-end">Order Placed</span></div>
-                                    <div class="sub-title">Order successfully placed</div>
-                                    <div class="info text-muted">Order placed by Austin Ninus</div>
+                                    <div class="title">{{ $order->created_at->format('d M Y') }} <span
+                                            class="badge bg-primary float-end">Sifariş verildi</span></div>
+                                    <div class="sub-title">Sifariş uğurla yerləşdirildi</div>
+                                    <div class="info text-muted">İstifadəçi: {{ $order->user->full_name }}</div>
                                 </li>
+
+                                <!-- Barcode yaradılma tarixi -->
+                                @if($order->barcode_created_at)
                                 <li class="card border-0 box">
                                     <span
                                         class="h-28px w-28px d-flex justify-content-center align-items-center text-white"><i
-                                            class="ri-inbox-unarchive-line"></i></span>
-                                    <div class="title">15 Dec 2024 <span
-                                            class="badge bg-secondary float-end">Packed</span></div>
-                                    <div class="sub-title">Order packed</div>
-                                    <div class="info text-muted">Collected by Suguna Enterprises</div>
+                                            class="ri-qr-code-line"></i></span>
+                                    <div class="title">{{ $order->barcode_created_at->format('d M Y') }} <span
+                                            class="badge bg-info float-end">Barkod yaradıldı</span></div>
+                                    <div class="sub-title">Barkod uğurla yaradıldı</div>
+                                    <div class="info text-muted">Barkod: {{ $order->barcode ?? 'Yoxdur' }}</div>
                                 </li>
+                                @endif
+
+                                <!-- Barkodun istifadə tarixi -->
+                                @if($order->barcode_used_at)
                                 <li class="card border-0 box">
                                     <span
                                         class="h-28px w-28px d-flex justify-content-center align-items-center text-white"><i
-                                            class="ri-truck-line"></i></span>
-                                    <div class="title">16 Dec 2024 <span
-                                            class="badge bg-warning float-end">Shipping</span></div>
-                                    <div class="sub-title">On the way</div>
-                                    <div class="info text-muted">Order picked and en route</div>
+                                            class="ri-checkbox-circle-line"></i></span>
+                                    <div class="title">{{ $order->barcode_used_at->format('d M Y') }} <span
+                                            class="badge bg-success float-end">Barkod istifadə edildi</span></div>
+                                    <div class="sub-title">Barkod uğurla istifadə edildi</div>
+                                    <div class="info text-muted">Status: {{ config('localData.barcode_status')[$order->barcode_status]['text'] ?? 'İstifadə edildi' }}</div>
                                 </li>
+                                @endif
+
+                                <!-- Barkodun geri qaytarılma tarixi -->
+                                @if($order->barcode_returned_at)
                                 <li class="card border-0 box">
                                     <span
                                         class="h-28px w-28px d-flex justify-content-center align-items-center text-white"><i
-                                            class="ri-e-bike-2-line"></i></span>
-                                    <div class="title">17 Dec 2024 <span class="badge bg-info float-end">Delivery</span>
-                                    </div>
-                                    <div class="sub-title">Delivery in progress</div>
-                                    <div class="info text-muted">Your package is out for delivery</div>
+                                            class="ri-arrow-go-back-line"></i></span>
+                                    <div class="title">{{ $order->barcode_returned_at->format('d M Y') }} <span
+                                            class="badge bg-warning float-end">Barkod geri qaytarıldı</span></div>
+                                    <div class="sub-title">Barkod geri qaytarıldı</div>
+                                    <div class="info text-muted">Qaytarma səbəbi: {{ $order->return_reason ?? 'Qeyd edilməyib' }}</div>
                                 </li>
+                                @endif
+
+                                <!-- Cari status -->
                                 <li class="card border-0 box">
                                     <span
                                         class="h-28px w-28px d-flex justify-content-center align-items-center text-white"><i
-                                            class="ri-hand-coin-line"></i></span>
-                                    <div class="title">17 Dec 2024 <span
-                                            class="badge bg-success float-end">Delivered</span></div>
-                                    <div class="sub-title">Order completed</div>
-                                    <div class="info text-muted">Successfully delivered</div>
+                                            class="ri-information-line"></i></span>
+                                    <div class="title">{{ now()->format('d M Y') }} <span
+                                            class="badge border border-{{ config('localData.barcode_status')[$order->barcode_status]['class'] ?? 'secondary' }}
+                                             text-{{ config('localData.barcode_status')[$order->barcode_status]['class'] ?? 'secondary' }} float-end">
+                                            {{ config('localData.barcode_status')[$order->barcode_status]['text'] ?? 'Status yoxdur' }}
+                                        </span></div>
+                                    <div class="sub-title">Cari status</div>
+                                    <div class="info text-muted">Son yeniləmə: {{ $order->updated_at->diffForHumans() }}</div>
                                 </li>
                             </ul>
                         </div>
-
                     </div>
                 </div>
             </div>

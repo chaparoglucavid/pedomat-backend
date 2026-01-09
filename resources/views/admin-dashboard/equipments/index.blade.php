@@ -55,6 +55,8 @@
                                                 <ul class="dropdown-menu" aria-labelledby="actionMenu1">
                                                     <li><a class="dropdown-item" href="{{ route('equipments.edit', encrypt($equipment->id)) }}"><i
                                                                 class="ri-edit-2-line"></i>Düzəliş et</a></li>
+                                                    <li><a class="dropdown-item" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#addPedModal-{{ $equipment->id }}"><i
+                                                                class="ri-add-circle-line"></i>Cihaza ped əlavə et</a></li>
                                                     <li><a class="dropdown-item" href="{{ route('equipments.show', encrypt($equipment->id)) }}"><i
                                                                 class="ri-eye-line"></i>Ətraflı bax</a></li>
                                                     <li><a class="dropdown-item" href="javascript:void(0)"><i
@@ -84,4 +86,40 @@
 
         </div>
     </div>
+
+    <!-- Modals outside the table structure -->
+    @foreach($equipments as $equipment)
+        <div class="modal fade" id="addPedModal-{{ $equipment->id }}" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Cihaza ped əlavə et</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('equipments.add-ped', encrypt($equipment->id)) }}" method="POST">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">Kateqoriya</label>
+                                <select name="ped_category_id" class="form-select" required>
+                                    <option value="">Seçin</option>
+                                    @foreach($ped_categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Say</label>
+                                <input type="number" name="qty" class="form-control" min="1" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Bağla</button>
+                            <button type="submit" class="btn btn-primary">Əlavə et</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
 @endsection
