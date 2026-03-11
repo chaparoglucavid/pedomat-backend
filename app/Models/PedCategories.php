@@ -11,7 +11,7 @@ class PedCategories extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'ped_categories';
-    protected $fillable = ['category_name','reason_for_use','status','unit_price'];
+    protected $fillable = ['category_name','reason_for_use','status','unit_price', 'brand_id'];
     protected $casts = ['unit_price' => 'decimal:2'];
 
     public function ScopeIsActive($query)
@@ -37,5 +37,10 @@ class PedCategories extends Model
     public function order_details()
     {
         return $this->hasMany(OrderDetails::class, 'ped_category_id');
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
     }
 }

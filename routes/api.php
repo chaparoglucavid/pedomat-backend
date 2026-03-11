@@ -7,9 +7,13 @@ use App\Http\Controllers\Api\Auth\RegistrationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\OrdersController;
 use App\Http\Controllers\Api\UserBalanceController;
+use App\Http\Controllers\Api\BrandController as ApiBrandController;
+use App\Http\Controllers\Api\PedCategoryController as ApiPedCategoryController;
+use App\Http\Controllers\Api\ForumController as ApiForumController;
+use App\Http\Controllers\Api\TransactionHistoryController as ApiTransactionHistoryController;
 
 
-Route::post('/login', [LoginController::class, 'login']);
+Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/register', [RegistrationController::class, 'register']);
 
 Route::middleware('auth:sanctum')->post('/logout', [LoginController::class, 'logout']);
@@ -22,3 +26,43 @@ Route::middleware('auth:sanctum')->post('/cancel-order', [OrdersController::clas
 
 Route::get('equipments', [EquipmentsController::class, 'index']);
 Route::get('equipment-details/{id}', [EquipmentsController::class, 'details']);
+Route::middleware('auth:sanctum')->put('equipments/{id}', [EquipmentsController::class, 'update']);
+
+// Brands API
+Route::get('brands', [ApiBrandController::class, 'index']);
+Route::get('brands/{id}', [ApiBrandController::class, 'show']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('brands', [ApiBrandController::class, 'store']);
+    Route::put('brands/{id}', [ApiBrandController::class, 'update']);
+    Route::delete('brands/{id}', [ApiBrandController::class, 'destroy']);
+
+    // Ped categories write routes
+    Route::post('ped-categories', [ApiPedCategoryController::class, 'store']);
+    Route::put('ped-categories/{id}', [ApiPedCategoryController::class, 'update']);
+    Route::delete('ped-categories/{id}', [ApiPedCategoryController::class, 'destroy']);
+});
+
+// Ped categories public
+Route::get('ped-categories', [ApiPedCategoryController::class, 'index']);
+Route::get('ped-categories/{id}', [ApiPedCategoryController::class, 'show']);
+
+
+// Forums
+Route::get('forums', [ApiForumController::class, 'index']);
+Route::get('forums/{id}', [ApiForumController::class, 'show']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('forums', [ApiForumController::class, 'store']);
+    Route::put('forums/{id}', [ApiForumController::class, 'update']);
+    Route::delete('forums/{id}', [ApiForumController::class, 'destroy']);
+    Route::post('forums/{id}/comments', [ApiForumController::class, 'comment']);
+});
+
+// Transaction histories
+Route::get('transaction-histories', [ApiTransactionHistoryController::class, 'index']);
+Route::get('transaction-histories/{id}', [ApiTransactionHistoryController::class, 'show']);
+
+
+// User endpoints
+Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'me']);
+Route::middleware('auth:sanctum')->get('/users', [UserController::class, 'index']); // consider admin-only
+Route::middleware('auth:sanctum')->get('/users/{id}', [UserController::class, 'show']); // consider admin-only

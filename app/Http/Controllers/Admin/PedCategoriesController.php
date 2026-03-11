@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PedCategories;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 
 class PedCategoriesController extends Controller
@@ -22,7 +23,8 @@ class PedCategoriesController extends Controller
      */
     public function create()
     {
-        return view('admin-dashboard.ped-categories.create');
+        $brands = Brand::all();
+        return view('admin-dashboard.ped-categories.create', compact('brands'));
     }
 
     /**
@@ -35,6 +37,7 @@ class PedCategoriesController extends Controller
             'reason_for_use'  => 'nullable|string',
             'unit_price'      => 'required|numeric|min:0',
             'status'          => 'required|in:active,inactive',
+            'brand_id'        => 'nullable|exists:brands,id',
         ]);
 
         PedCategories::create($validated);
@@ -62,7 +65,8 @@ class PedCategoriesController extends Controller
         {
             return flash()->error('Kateqoriya tapılmadı.');
         }
-        return view('admin-dashboard.ped-categories.edit', compact('ped_category'));
+        $brands = Brand::all();
+        return view('admin-dashboard.ped-categories.edit', compact('ped_category', 'brands'));
     }
 
     /**
@@ -81,6 +85,7 @@ class PedCategoriesController extends Controller
             'reason_for_use'  => 'nullable|string',
             'unit_price'      => 'required|numeric|min:0',
             'status'          => 'required|in:active,inactive',
+            'brand_id'        => 'nullable|exists:brands,id',
         ]);
 
         $ped_category->update($validated);

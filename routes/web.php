@@ -9,32 +9,8 @@ use App\Http\Controllers\Admin\{
     ForumController,
     PedCategoriesController,
     TransactionHistoriesController,
-    OrdersController
+    OrdersController,
+    BrandController
 };
 use Illuminate\Support\Facades\Route;
-
-Route::middleware('guest')->group(function () {
-    Route::get('/', function () {
-        return redirect('/login');
-    });
-    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login'])->name('login');
-});
-
-Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('equipments', EquipmentsController::class);
-    Route::post('equipments/{id}/add-ped', [EquipmentsController::class, 'addPedStock'])->name('equipments.add-ped');
-    Route::resource('ped-categories', PedCategoriesController::class);
-    Route::resource('users', UsersController::class);
-    Route::resource('orders', OrdersController::class);
-    Route::resource('transaction-histories', TransactionHistoriesController::class);
-    Route::resource('forums', ForumController::class);
-
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-});
-
-
-
-
 
