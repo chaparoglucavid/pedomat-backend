@@ -13,11 +13,16 @@ class UserBalanceController extends Controller
     public function topUpBalance(Request $request, TopUpBalanceService $topUpBalanceService)
     {
         $validatedData = $request->validate([
-            'amount' => 'required|numeric|min:1',
-            'paymentMethod' => 'required|string|in:card,terminal'
+            'amount' => 'required|numeric|min:0.01',
+            'paymentMethod' => 'required|string|in:card,terminal',
+            'user_id' => 'nullable|exists:users,id'
         ]);
 
-        $user = Auth::user();
+        $user = $request->user_id ? \App\Models\User::find($request->user_id) : Auth::user();
+
+        if (!$user) {
+            return response()->json(['success' => false, 'message' => 'İstifadəçi tapılmadı'], 404);
+        }
         $paymentMethod = $validatedData['paymentMethod'];
         $amount = $validatedData['amount'];
 

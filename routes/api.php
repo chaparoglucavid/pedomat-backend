@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\ForumController as ApiForumController;
 use App\Http\Controllers\Api\TransactionHistoryController as ApiTransactionHistoryController;
 
 
+use App\Http\Controllers\Api\StoryController;
+
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/register', [RegistrationController::class, 'register']);
 
@@ -20,6 +22,7 @@ Route::middleware('auth:sanctum')->post('/logout', [LoginController::class, 'log
 Route::middleware('auth:sanctum')->post('/update-profile', [UserController::class, 'updateProfile']);
 Route::middleware('auth:sanctum')->get('/user-transaction-history', [UserController::class, 'getUserTransactionHistory']);
 Route::middleware('auth:sanctum')->post('/top-up-balance', [UserBalanceController::class, 'topUpBalance']);
+Route::middleware('auth:sanctum')->post('/users/{id}/top-up-balance', [UserBalanceController::class, 'topUpBalance'])->where('id', '[0-9]+');
 Route::middleware('auth:sanctum')->get('/orders', [OrdersController::class, 'orders']);
 Route::middleware('auth:sanctum')->post('/orders/store', [OrdersController::class, 'store']);
 Route::middleware('auth:sanctum')->post('/cancel-order', [OrdersController::class, 'cancel']);
@@ -66,3 +69,14 @@ Route::get('transaction-histories/{id}', [ApiTransactionHistoryController::class
 Route::middleware('auth:sanctum')->get('/user', [UserController::class, 'me']);
 Route::middleware('auth:sanctum')->get('/users', [UserController::class, 'index']); // consider admin-only
 Route::middleware('auth:sanctum')->get('/users/{id}', [UserController::class, 'show']); // consider admin-only
+Route::middleware('auth:sanctum')->put('/users/{id}', [UserController::class, 'update']);
+Route::middleware('auth:sanctum')->put('/users/{id}/status', [UserController::class, 'updateStatus']);
+
+// Stories
+Route::get('stories', [StoryController::class, 'index']);
+Route::get('stories/{id}', [StoryController::class, 'show']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('stories', [StoryController::class, 'store']);
+    Route::post('stories/{id}', [StoryController::class, 'update']); // Use POST for multipart/form-data updates in Laravel
+    Route::delete('stories/{id}', [StoryController::class, 'destroy']);
+});
