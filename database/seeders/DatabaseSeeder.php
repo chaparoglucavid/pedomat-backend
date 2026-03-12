@@ -18,7 +18,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             EquipmentSeeder::class,
             PedCategoriesSeeder::class,
-            EquipmentPedStockSeeder::class
+            EquipmentPedStockSeeder::class,
+            PackageSeeder::class
         ]);
     }
 }

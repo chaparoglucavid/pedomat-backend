@@ -16,6 +16,9 @@ class Package extends Model
         'discount_percent',
         'validity_days',
         'icon_path',
+        'order_index',
+        'is_popular',
+        'badge_text',
         'status',
     ];
 

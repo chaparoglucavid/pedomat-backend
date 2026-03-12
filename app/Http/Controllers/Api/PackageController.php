@@ -13,8 +13,10 @@ class PackageController extends Controller
 {
     public function index()
     {
-        $packages = Package::with('features')->orderBy('created_at', 'desc')->get();
-        return PackageResource::collection($packages);
+        $packages = Package::with('features')
+            ->orderBy('order_index', 'asc')
+            ->get();
+        return response()->json($packages);
     }
 
     public function show($id)
@@ -32,86 +34,72 @@ class PackageController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
-            'discount_percent' => 'required|numeric|min:0|max:100',
+            'discount_percent' => 'nullable|numeric|min:0|max:100',
             'validity_days' => 'required|integer|min:1',
+            'order_index' => 'nullable|integer',
+            'is_popular' => 'nullable|boolean',
+            'badge_text' => 'nullable|string|max:50',
             'status' => 'required|in:active,inactive',
-            'icon' => 'nullable|image|max:4096',
+            'icon' => 'nullable|image|max:2048',
             'features' => 'nullable|array',
-            'features.*.name' => 'required_with:features|string|max:255',
+            'features.*.name' => 'required|string|max:255',
             'features.*.value' => 'nullable|string|max:255',
         ]);
 
-        $iconPath = null;
         if ($request->hasFile('icon')) {
-            $iconPath = $request->file('icon')->store('packages', 'public');
+            $path = $request->file('icon')->store('packages', 'public');
+            $validated['icon_path'] = asset('storage/' . $path);
         }
 
-        $pkg = Package::create([
-            'title' => $validated['title'],
-            'description' => $validated['description'] ?? null,
-            'price' => $validated['price'],
-            'discount_percent' => $validated['discount_percent'],
-            'validity_days' => $validated['validity_days'],
-            'status' => $validated['status'],
-            'icon_path' => $iconPath,
-        ]);
+        $package = Package::create($validated);
 
         if (!empty($validated['features'])) {
-            foreach ($validated['features'] as $f) {
-                PackageFeature::create([
-                    'package_id' => $pkg->id,
-                    'name' => $f['name'],
-                    'value' => $f['value'] ?? null,
-                ]);
+            foreach ($validated['features'] as $feature) {
+                $package->features()->create($feature);
             }
         }
 
-        return new PackageResource($pkg->load('features'));
+        return response()->json($package->load('features'), 201);
     }
 
     public function update(Request $request, $id)
     {
-        $pkg = Package::with('features')->find($id);
-        if (!$pkg) return response()->json(['message' => 'Paket tapılmadı'], 404);
+        $package = Package::findOrFail($id);
 
         $validated = $request->validate([
-            'title' => 'sometimes|required|string|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'sometimes|required|numeric|min:0',
-            'discount_percent' => 'sometimes|required|numeric|min:0|max:100',
-            'validity_days' => 'sometimes|required|integer|min:1',
-            'status' => 'sometimes|required|in:active,inactive',
-            'icon' => 'nullable|image|max:4096',
+            'price' => 'required|numeric|min:0',
+            'discount_percent' => 'nullable|numeric|min:0|max:100',
+            'validity_days' => 'required|integer|min:1',
+            'order_index' => 'nullable|integer',
+            'is_popular' => 'nullable|boolean',
+            'badge_text' => 'nullable|string|max:50',
+            'status' => 'required|in:active,inactive',
+            'icon' => 'nullable|image|max:2048',
             'features' => 'nullable|array',
-            'features.*.name' => 'required_with:features|string|max:255',
+            'features.*.name' => 'required|string|max:255',
             'features.*.value' => 'nullable|string|max:255',
         ]);
 
         if ($request->hasFile('icon')) {
-            if ($pkg->icon_path && Storage::disk('public')->exists($pkg->icon_path)) {
-                Storage::disk('public')->delete($pkg->icon_path);
+            if ($package->icon_path) {
+                // Logic to delete old file if needed
             }
-            $pkg->icon_path = $request->file('icon')->store('packages', 'public');
+            $path = $request->file('icon')->store('packages', 'public');
+            $validated['icon_path'] = asset('storage/' . $path);
         }
 
-        foreach (['title','description','price','discount_percent','validity_days','status'] as $field) {
-            if (isset($validated[$field])) $pkg->{$field} = $validated[$field];
-        }
-        $pkg->save();
+        $package->update($validated);
 
         if (isset($validated['features'])) {
-            // Reset features for simplicity
-            $pkg->features()->delete();
-            foreach ($validated['features'] as $f) {
-                PackageFeature::create([
-                    'package_id' => $pkg->id,
-                    'name' => $f['name'],
-                    'value' => $f['value'] ?? null,
-                ]);
+            $package->features()->delete();
+            foreach ($validated['features'] as $feature) {
+                $package->features()->create($feature);
             }
         }
 
-        return new PackageResource($pkg->load('features'));
+        return response()->json($package->load('features'));
     }
 
     public function destroy($id)

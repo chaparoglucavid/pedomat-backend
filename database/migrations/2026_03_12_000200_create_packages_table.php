@@ -15,6 +15,9 @@ return new class extends Migration {
             $table->decimal('discount_percent', 5, 2)->default(0);
             $table->integer('validity_days')->default(0);
             $table->string('icon_path')->nullable();
+            $table->integer('order_index')->default(0);
+            $table->boolean('is_popular')->default(false);
+            $table->string('badge_text')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
