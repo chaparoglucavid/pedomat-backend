@@ -14,6 +14,9 @@ use App\Http\Controllers\Api\TransactionHistoryController as ApiTransactionHisto
 
 
 use App\Http\Controllers\Api\StoryController;
+use App\Http\Controllers\Api\BannerController;
+use App\Http\Controllers\Api\PackageController;
+use App\Http\Controllers\Api\UserPackageController;
 
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/register', [RegistrationController::class, 'register']);
@@ -30,6 +33,7 @@ Route::middleware('auth:sanctum')->post('/cancel-order', [OrdersController::clas
 Route::get('equipments', [EquipmentsController::class, 'index']);
 Route::get('equipment-details/{id}', [EquipmentsController::class, 'details']);
 Route::middleware('auth:sanctum')->put('equipments/{id}', [EquipmentsController::class, 'update']);
+Route::middleware('auth:sanctum')->post('equipments/{id}/stocks', [EquipmentsController::class, 'addStock']);
 
 // Brands API
 Route::get('brands', [ApiBrandController::class, 'index']);
@@ -79,4 +83,35 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('stories', [StoryController::class, 'store']);
     Route::post('stories/{id}', [StoryController::class, 'update']); // Use POST for multipart/form-data updates in Laravel
     Route::delete('stories/{id}', [StoryController::class, 'destroy']);
+});
+
+// Banners
+Route::get('banners', [BannerController::class, 'index']);
+Route::get('banners/{id}', [BannerController::class, 'show']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('banners', [BannerController::class, 'store']);
+    Route::post('banners/{id}', [BannerController::class, 'update']); // Use POST for multipart/form-data updates
+    Route::delete('banners/{id}', [BannerController::class, 'destroy']);
+});
+
+// Packages
+Route::get('packages', [PackageController::class, 'index']);
+Route::get('packages/{id}', [PackageController::class, 'show']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('packages', [PackageController::class, 'store']);
+    Route::post('packages/{id}', [PackageController::class, 'update']);
+    Route::delete('packages/{id}', [PackageController::class, 'destroy']);
+});
+
+// User packages
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('user-packages', [UserPackageController::class, 'index']);
+    Route::get('user-packages/active', [UserPackageController::class, 'active']);
+    Route::post('user-packages/subscribe', [UserPackageController::class, 'subscribe']);
+    Route::post('user-packages/cancel', [UserPackageController::class, 'cancel']);
+    // Admin manage user packages
+    Route::get('users/{id}/packages', [UserPackageController::class, 'listByUser']);
+    Route::get('users/{id}/packages/active', [UserPackageController::class, 'activeByUser']);
+    Route::post('users/{id}/packages/subscribe', [UserPackageController::class, 'subscribeByUser']);
+    Route::post('users/{id}/packages/cancel', [UserPackageController::class, 'cancelByUser']);
 });

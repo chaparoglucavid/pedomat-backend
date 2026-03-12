@@ -109,5 +109,10 @@ class User extends Authenticatable
         return $this->hasMany(Forum::class, 'user_id', 'id');
     }
 
+    public function user_packages()
+    {
+        return $this->hasMany(UserPackage::class, 'user_id', 'id');
+    }
+
 
 }

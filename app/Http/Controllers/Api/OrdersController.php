@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\EquipmentPedStock;
 use App\Models\Equipments;
 use App\Models\Orders;
+use App\Models\UserPackage;
 use App\Models\PedCategories;
 use App\Services\BarcodeService;
 use App\Services\PaymentService;
@@ -100,12 +101,27 @@ class OrdersController extends Controller
                 $stock->decrement('qty_available', $quantity);
             }
 
+            // Discount via active user package
+            $appliedPackageId = null;
+            $discountPercent = 0;
+            $discountAmount = 0;
+            $activeSub = UserPackage::with('package')->where('user_id', $user->id)->active()->first();
+            if ($activeSub && $activeSub->package && $activeSub->package->discount_percent > 0) {
+                $appliedPackageId = $activeSub->package->id;
+                $discountPercent = $activeSub->package->discount_percent;
+                $discountAmount = round($totalAmount * ($discountPercent / 100), 2);
+                $totalAmount = max(0, $totalAmount - $discountAmount);
+            }
+
             // Create order
             $order = Orders::create([
                 'user_id' => $user->id,
+                'applied_package_id' => $appliedPackageId,
                 'equipment_id' => $equipment->id,
                 'order_qty_sum' => $orderQtySum,
                 'order_amount_sum' => $totalAmount,
+                'discount_percent' => $discountPercent,
+                'discount_amount' => $discountAmount,
                 'payment_method' => $paymentMethod,
                 'payment_status' => 'completed',
                 'barcode_status' => 'not_used',

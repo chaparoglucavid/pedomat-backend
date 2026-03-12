@@ -21,7 +21,13 @@ class UserController extends Controller
     public function show($id)
     {
         try {
-            $user = User::with(['user_transaction_history', 'orders.equipment', 'orders.order_details.ped_category'])->findOrFail($id);
+            $user = User::with([
+                'user_transaction_history',
+                'orders.equipment',
+                'orders.order_details.ped_category',
+                'user_packages.package.features'
+            ])->findOrFail($id);
+            $activeSub = $user->user_packages()->active()->with('package.features')->first();
             return response()->json([
                 'success' => true,
                 'data' => [
@@ -36,7 +42,25 @@ class UserController extends Controller
                     'type' => $user->type,
                     'created_at' => $user->created_at,
                     'transactions' => $user->user_transaction_history,
-                    'orders' => $user->orders
+                    'orders' => $user->orders,
+                    'active_package' => $activeSub ? [
+                        'id' => $activeSub->id,
+                        'package' => [
+                            'id' => $activeSub->package->id,
+                            'title' => $activeSub->package->title,
+                            'description' => $activeSub->package->description,
+                            'price' => $activeSub->package->price,
+                            'discount_percent' => $activeSub->package->discount_percent,
+                            'validity_days' => $activeSub->package->validity_days,
+                            'icon_path' => $activeSub->package->icon_path,
+                            'icon_url' => $activeSub->package->icon_path ? asset('storage/' . ltrim($activeSub->package->icon_path, '/')) : null,
+                            'status' => $activeSub->package->status,
+                            'features' => $activeSub->package->features,
+                        ],
+                        'start_date' => $activeSub->start_date,
+                        'end_date' => $activeSub->end_date,
+                        'status' => $activeSub->status,
+                    ] : null,
                 ]
             ], 200);
         } catch (\Exception $e) {
