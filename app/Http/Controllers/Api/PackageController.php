@@ -13,9 +13,7 @@ class PackageController extends Controller
 {
     public function index()
     {
-        $packages = Package::with('features')
-            ->orderBy('order_index', 'asc')
-            ->get();
+        $packages = Package::with('features')->get()->sortBy('order_index')->values();
         return response()->json($packages);
     }
 

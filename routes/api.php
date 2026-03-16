@@ -20,6 +20,9 @@ use App\Http\Controllers\Api\UserPackageController;
 
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 Route::post('/register', [RegistrationController::class, 'register']);
+Route::get('/cors-config', function () {
+    return response()->json(config('cors'));
+});
 
 Route::middleware('auth:sanctum')->post('/logout', [LoginController::class, 'logout']);
 Route::middleware('auth:sanctum')->post('/update-profile', [UserController::class, 'updateProfile']);
