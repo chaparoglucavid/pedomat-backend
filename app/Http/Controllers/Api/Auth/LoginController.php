@@ -27,7 +27,7 @@ class LoginController extends Controller
         return response()->json([
             'user' => $user,
             'token' => $token,
-        ]);
+        ], 200);
     }
 
     public function logout(Request $request)

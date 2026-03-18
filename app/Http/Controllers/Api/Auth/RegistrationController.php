@@ -14,19 +14,32 @@ class RegistrationController extends Controller
 {
     public function register(Request $request)
     {
-        $request->validate([
+        $validator = \Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:8',
-            'birthdate' => 'required|date',
-            'phone' => 'required|string|min:8|unique:users',
+            'confirmPassword' => 'required|string|min:8|same:password',
+        ], [
+            'name.required' => 'Ad və soyad boş ola bilməz',
+            'email.required' => 'Email boş ola bilməz',
+            'email.email' => 'Email düzgün deyil',
+            'email.unique' => 'Bu email artıq qeydiyyatdan keçib',
+            'password.required' => 'Şifrə boş ola bilməz',
+            'password.min' => 'Şifrə minimum 8 simvol olmalıdır',
+            'confirmPassword.same' => 'Şifrələr uyğun deyil',
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()->first(),
+                'errors' => $validator->errors(),
+            ], 422);
+        }
 
         $user = User::create([
             'full_name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->phone,
-            'birthdate' => Carbon::parse($request->birthdate),
             'password' => Hash::make($request->password),
             'activity_status' => 'active',
             'system_status' => 'verified',
